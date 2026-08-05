@@ -1,40 +1,135 @@
-Minimum requirements to solve the model
+# Minimum requirements to solve the model
 
-A valid GAMS/CPLEX License 64 GB RAM CPU threads >10 HDD space 10 GB Basic Knowledge of the TIMES modelling Framework (see also https://iea-etsap.org/index.php/documentation) Installation
+Before running the model, ensure that your system satisfies the following requirements:
 
-Download all two directories into the same folder at a local computer. The structure the three directories is as follows:
+- A valid **GAMS/CPLEX** license
+- At least **64 GB RAM**
+- More than **10 CPU threads**
+- At least **10 GB** of available disk space
+- Basic knowledge of the **TIMES modelling framework** (see also: https://iea-etsap.org/index.php/documentation)
 
-Gams_WrkJRCTIMES : contains the model input data 
-Results : contains the model result generation routines and template files Contents of the model input data directory
+---
 
-The model code and input data are in flat text files with the extension .dmp . The folder also contains additional files like solver options and the scripts to run the POLIZERO scenarios. In addition, the post-model solution files, with the results of each scenario in raw output format, are also located in this folder. All the above are explained in the subsections below
+# Installation
 
+Download both directories into the same parent folder on your local computer.
 
-Model input data files:CLI_MM.dmp JRC-EU-TIMES input data and code for the medium-medium scenario of HighRES in terms capacity potential for onshore and offshore wind capacity potential.
+The directory structure should be:
 
-Other files required for solving the model
-Besides the data input and model code files, there are also additional files controlling the solution of the model.
+```text
+Project/
+├── Gams_WrkJRCTIMES/
+└── Results/
+```
 
-cplex.opt : CPLEX solver option files
-vtrun.CMD : script to run the CLI_MM scenario 
+- **`Gams_WrkJRCTIMES/`** contains the model input data.
+- **`Results/`** contains the model result generation routines and template files.
 
-Post-solution files
-When the solution of a scenario with the JRC-EU-TIMES finishes, the corresponding GDX file is generated at the subfolder GAMSSAVE. There are three GDX files alreaydy there:
+---
 
-CLI_MM.gdx : CLI_MM scenario GDX file
+# Contents of the model input data directory
 
-These GDX files are translated into flat text files with extensions .vds, .vde and .vd. These files contain the output of the model in a format suitable for the TIMES licensed user interface VEDA (please see https://iea-etsap.org/index.php/documentation)
+The model code and input data are stored as plain text files with the `.dmp` extension.
 
-Contents of the model results directory
-The subfolder Results contain the following files:
+The directory also contains:
 
-collect_results_single_scenario_WIMBY.gms : is a routine to process the .vd files of TIMES to a format suitable for EXCEL
-results_template_WIMBY.xlsb : results template file in EXCEL format for the boundary conditions for HighRES
-CLI_MM.xlsb : results from the CLI_MM scenario of in EXCEL
-The subfolder also contains the scripts to produce the results from a TIMES run:
+- Solver option files
+- Scripts to execute the POLIZERO scenarios
+- Post-solution files containing the raw results generated for each scenario
 
-collect_wimby.bat : batch main script to generate the EXCEL files with the results from CLI_MM
+The contents of this directory are described below.
 
-Example of the workflow with the JRC-EU-TIMES
-execute the scripts CLI_MM.CMD to run the CLI_MM scenario
-execute the script collect_wimby.bat to create the results EXCEL file
+---
+
+## Model input data files
+
+| File | Description |
+|------|-------------|
+| `CLI_MM.dmp` | JRC-EU-TIMES input data and model code for the **CLI_MM** scenario of the **HighRES** project, assuming **medium** onshore and offshore wind capacity potentials. |
+
+---
+
+## Other files required for solving the model
+
+Besides the model input and source code, the following files control the execution of the model.
+
+| File | Description |
+|------|-------------|
+| `cplex.opt` | CPLEX solver option file |
+| `vtrun.CMD` | Script used to execute the `CLI_MM` scenario |
+
+---
+
+## Post-solution files
+
+After the JRC-EU-TIMES model successfully finishes, the corresponding **GDX** file is automatically generated in the `GAMSSAVE` subdirectory.
+
+The folder currently contains:
+
+| File | Description |
+|------|-------------|
+| `CLI_MM.gdx` | GDX output generated for the `CLI_MM` scenario |
+
+The GDX files are subsequently translated into flat text files with the extensions:
+
+- `.vd`
+- `.vde`
+- `.vds`
+
+These files store the model results in a format compatible with the **VEDA** user interface for TIMES models.
+
+For additional information on VEDA, see:
+
+https://iea-etsap.org/index.php/documentation
+
+---
+
+# Contents of the model results directory
+
+The `Results` directory contains the routines required to process the TIMES outputs and generate the final Excel reports.
+
+## Processing routines
+
+| File | Description |
+|------|-------------|
+| `collect_results_single_scenario_WIMBY.gms` | GAMS routine that converts the TIMES `.vd` files into a format suitable for Excel processing. |
+
+## Result templates
+
+| File | Description |
+|------|-------------|
+| `results_template_WIMBY.xlsb` | Excel template containing the boundary conditions and output structure used for the HighRES project. |
+
+## Scenario results
+
+| File | Description |
+|------|-------------|
+| `CLI_MM.xlsb` | Excel results generated for the `CLI_MM` scenario. |
+
+## Execution scripts
+
+| File | Description |
+|------|-------------|
+| `collect_wimby.bat` | Main batch script used to generate the Excel output files from a completed TIMES model run. |
+
+---
+
+# Example workflow
+
+The typical workflow is as follows:
+
+1. Execute the script
+
+   ```text
+   CLI_MM.CMD
+   ```
+
+   to solve the `CLI_MM` scenario.
+
+2. After the model finishes successfully, execute
+
+   ```text
+   collect_wimby.bat
+   ```
+
+   to generate the corresponding Excel results file.
