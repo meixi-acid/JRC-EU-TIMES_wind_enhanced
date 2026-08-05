@@ -1,0 +1,10 @@
+preind 1
+aggind 50
+lpmethod 4 
+threads -1
+predual -1
+scaind 1
+numericalemphasis 1
+barcolnz 250
+*  baralg 2
+solutiontype 2

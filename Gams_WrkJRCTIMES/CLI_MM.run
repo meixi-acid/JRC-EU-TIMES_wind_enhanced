@@ -1,0 +1,134 @@
+$TITLE  TIMES -- VERSION 4.1.0
+OPTION PROFILE=0, SOLVEOPT=REPLACE;
+OPTION RESLIM=50000, ITERLIM=999999, LIMROW=9999999, LIMCOL=0, SOLPRINT=OFF;
+
+option LP=cplex;
+*option lp=convert;
+
+*--If you want to use an optimizer other than cplex/xpress, enter it here:
+*OPTION LP=MyOptimizer;
+
+$OFFLISTING
+* $ONLISTING
+
+* activate validation to force VAR_CAP/COMPRD
+$SET VALIDATE 'NO'
+* reduction of equation system
+$SET REDUCE   'YES'
+*--------------------------------------------------------------*
+* BATINCLUDE calls should all be with lower case file names!!! *
+*--------------------------------------------------------------*
+
+* initialize the environment variables
+$ SET DSCAUTO YES 
+$   SET VDA YES 
+$   SET DEBUG                          'NO'
+$   SET DUMPSOL                        'NO'
+$   SET SOLVE_NOW                      'YES'
+$   SET MODEL_NAME                     'TIMES'
+$   IF DECLARED REG      $SET STARTRUN 'RESTART'
+$   IF NOT DECLARED REG  $SET STARTRUN 'SCRATCH'
+$SET XTQA YES
+* VAR_UC being set so that non-binding constraints appear in results
+$SET VAR_UC YES 
+ OPTION BRATIO=1;
+$ SET OBJ AUTO
+$ SET MID_YEAR YES
+$ SET OBLONG YES
+$SET DAMAGE NO
+$ SET STAGES NO
+$SET SOLVEDA 'YES'
+$SET VARCOST LIN
+$ SET DSC NO
+$SET RETIRE YES
+$SET ANNCOST LEV
+$ SET RPT_FLOTS COM
+$ SET RPT_OPT NCAP.1 1
+$SET DATAGDX NO
+
+* Enable to fix solution 
+*$SET FIXBOH 2020
+*$SET LPOINT bau-2050_calib
+
+
+* merge declarations & data
+$   ONMULTI
+
+* the times-slices MUST come 1st to ensure ordering OK
+$BATINCLUDE extract_all_ts.dd
+
+* perform fixed declarations
+$SET BOTIME 1940
+$   BATINCLUDE initsys.mod
+
+* declare the (system/user) empties
+$   BATINCLUDE initmty.mod
+*$   BATINCLUDE initmty.mod DSC
+$IF NOT DECLARED REG_BNDCST $Abort "You need to use TIMES v2.3.1 or higher"
+
+$BATINCLUDE base.dd
+$BATINCLUDE 00_nuc-eu.dd
+$BATINCLUDE 01_nucchain-eu.dd
+$BATINCLUDE 10_techs_ind.dd
+$BATINCLUDE 11_techs_power.dd
+$BATINCLUDE 13_techs_ind-chp.dd
+$BATINCLUDE 14_techs_storage.dd
+$BATINCLUDE 15_techs_hydrogen.dd
+$BATINCLUDE 16_techs_greenh2.dd
+$BATINCLUDE 17_techs_agr.dd
+$BATINCLUDE 20_techs_tra.dd
+$BATINCLUDE 21_techs_other.dd
+$BATINCLUDE 22_techs_biorefineries.dd
+$BATINCLUDE 23_techs_ccus.dd
+$BATINCLUDE 30_techs_heatingcooling.dd
+$BATINCLUDE 31_techs_buildings_com.dd
+$BATINCLUDE 32_techs_buildings_rsd.dd
+$BATINCLUDE 40_trade-extraeu.dd
+$BATINCLUDE 41_trade-elc-balkans.dd
+$BATINCLUDE 50_shalegas.dd
+$batinclude 60_aggrdumproc.dd
+$BATINCLUDE syssettings.dd
+$BATINCLUDE tradeparameters.dd
+$BATINCLUDE 00_power_generation_costs_capacities.dd
+$BATINCLUDE biopot_biom16_forestbau.dd
+$BATINCLUDE demand_com-fr.dd
+$BATINCLUDE emisco2.dd
+$BATINCLUDE fuelprices_ref2020.dd
+$BATINCLUDE fuelprices-deliv.dd
+$BATINCLUDE newhouses_and_retrofits.dd
+$BATINCLUDE 00_demand_projref2020.dd
+$BATINCLUDE sepdb-zietassumptions_drate.dd
+$BATINCLUDE uc-sup_trade.dd
+$BATINCLUDE uc_elcpot.dd
+$BATINCLUDE uc_ptx.dd
+$BATINCLUDE uc_rsd-com.dd
+$BATINCLUDE uc-ind.dd
+$BATINCLUDE uc-elc.dd
+$BATINCLUDE uc_storage.dd
+$BATINCLUDE uc_tra.dd
+$batinclude uc-dum.dd
+$BATINCLUDE x-yesgrid_bound.dd
+$BATINCLUDE z_dac.dd
+$BATINCLUDE 01_baseline.dd
+$BATINCLUDE 01_polizero_baseline.dd
+$BATINCLUDE 02_polizero_cli.dd
+
+$BATINCLUDE uc_elcpot_wind_mm.dd
+
+
+* $batinclude remove_ucs.gms
+
+* SET MILESTONYR /2019,2020,2025,2030,2035,2040,2045,2050,2055,2060/;
+SET MILESTONYR /2019,2020,2025,2030,2035,2040,2045,2050/;
+
+$SET RUN_NAME 'cli-2050'
+
+
+$ SET VEDAVDD 'YES'
+
+* do the rest
+$ BATINCLUDE maindrv.mod mod
+
+
+
+
