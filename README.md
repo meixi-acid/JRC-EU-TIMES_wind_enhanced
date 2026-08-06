@@ -45,7 +45,7 @@ The contents of this directory are described below.
 
 | File | Description |
 |------|-------------|
-| `CLI_MM.dmp` | JRC-EU-TIMES input data and model code for the **CLI_MM** scenario of the **HighRES** project, assuming **medium** onshore and offshore wind capacity potentials. |
+| `CLI_MM.dmp` | JRC-EU-TIMES input data and model code for the **CLI_MM** scenario used to provide electricity system boundary conditions to **highRES**. |
 
 ---
 
